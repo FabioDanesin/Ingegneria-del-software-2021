@@ -1,5 +1,8 @@
 # Ingegneria-del-software-2021
-
+##Parametri di sviluppo: 
+	- IDE usato: Visual Studio Code(JS), Android Studio(Java/Android)
+	- Versione NPM: 5.6.0
+	- Versione NodeJS: 10.0.0
 # Setup Progetto
 - Windows: 
 
@@ -21,5 +24,7 @@
 - Tutte le altre distro di linux: 
 	Usa Ubuntu
 	
-- Comune a tutti i sistemi:
+#Comune a tutti i sistemi:
 	Dopo aver completato il setup di npm e Node, aprire un terminale nella cartella di Families_Share-Platform-Master e digitare ```npm install```.
+	Per runnare il backend dev server, è possibile farlo da terminale digitando ```npm run dev-server``` o aprendo il file package.json, posizionare il mouse sopra  
+	a "dev-server" sotto il tag "clients" e cliccare Run Script(o Debug Script) nella finestra a scomparsa che appare.
