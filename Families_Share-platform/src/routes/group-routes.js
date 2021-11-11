@@ -14,6 +14,10 @@ const jwt = new google.auth.JWT(
   process.env[googleKey].replace(/\\n/g, '\n'),
   scopes
 )
+const calendar = google.calendar({
+  version: 'v3',
+  auth: jwt
+})
 const path = require('path')
 const sharp = require('sharp')
 const nodemailer = require('nodemailer')
@@ -31,11 +35,6 @@ if (process.env.NODE_APP_INSTANCE === 0) {
     ah.checkCompletedTimeslots()
   })
 }
-
-const calendar = google.calendar({
-  version: 'v3',
-  auth: jwt
-})
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -493,7 +492,9 @@ router.patch('/:id/members', async (req, res, next) => {
       message = 'Admin removed'
     }
     res.status(200).send(message)
-  } catch (err) { next(err) }
+  } catch (err) {
+    next(err)
+  }
 })
 
 router.delete('/:groupId/members/:memberId', async (req, res, next) => {
@@ -705,7 +706,12 @@ router.get('/:id/metrics', async (req, res, next) => {
     const totalVolunteers = members.length
     const totalKids = [...new Set(children.map(c => c.child_id))].length
     const totalEvents = events.length
-    const contributions = profiles.map(p => ({ contribution: 0, user_id: p.user_id, given_name: p.given_name, family_name: p.family_name }))
+    const contributions = profiles.map(p => ({
+      contribution: 0,
+      user_id: p.user_id,
+      given_name: p.given_name,
+      family_name: p.family_name
+    }))
     const completedEvents = events.filter(e => e.extendedProperties.shared.status === 'completed')
     const totalCompletedEvents = completedEvents.length
     completedEvents.forEach(event => {
@@ -1139,7 +1145,9 @@ router.post('/:id/activities', async (req, res, next) => {
     activity.activity_id = activity_id
     const group = await Group.findOne({ group_id })
     activity.group_name = group.name
-    events.forEach(event => { event.extendedProperties.shared.activityId = activity_id })
+    events.forEach(event => {
+      event.extendedProperties.shared.activityId = activity_id
+    })
     await Promise.all(
       events.map(event =>
         calendar.events.insert({

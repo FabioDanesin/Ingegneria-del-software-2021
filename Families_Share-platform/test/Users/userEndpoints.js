@@ -1,3 +1,4 @@
+/* eslint-disable no-undef,handle-callback-err */ // TODO: togliere questa riga per avere tutti gli warning mostrate da ESlint
 const common = require('../common')
 const server = common.server
 const chai = common.chai
@@ -33,8 +34,7 @@ describe('/Post/api/users', () => {
 })
 describe('/Post/api/users', () => {
   it('it should not sign up a user with incorrect parameters', (done) => {
-    const user = {
-    }
+    const user = {}
     chai.request(server)
       .post('/api/users')
       .send(user)
@@ -104,8 +104,7 @@ describe('/Post/api/users/authenticate/email', () => {
 })
 describe('/Post/api/users/authenticate/email', () => {
   it('it should not log in a user with no credentials', (done) => {
-    const credentials = {
-    }
+    const credentials = {}
     chai.request(server)
       .post('/api/users/authenticate/email')
       .send(credentials)
@@ -146,6 +145,7 @@ describe('/Post/api/users/authenticate/google', () => {
       })
   })
 })
+
 describe('/Post/api/users/authenticate/google', () => {
   it('it should sign up a user with his google account', (done) => {
     const data = {
