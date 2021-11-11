@@ -1,7 +1,7 @@
-import registrationConstants from "../Constants/RegistrationConstants";
-import registrationServices from "../Services/RegistrationServices";
+import registrationConstants from '../Constants/RegistrationConstants'
+import registrationServices from '../Services/RegistrationServices'
 
-function signup(
+function signup (
   given_name,
   family_name,
   number,
@@ -10,18 +10,22 @@ function signup(
   visible,
   deviceToken,
   history
-) {
-  function request() {
-    return { type: registrationConstants.SIGNUP_REQUEST };
+) {,,,,
+
+  function request () {
+    return { type: registrationConstants.SIGNUP_REQUEST }
   }
-  function success(user) {
-    return { type: registrationConstants.SIGNUP_SUCCESS, user };
+
+  function success (user) {
+    return { type: registrationConstants.SIGNUP_SUCCESS, user }
   }
-  function failure(error) {
-    return { type: registrationConstants.SIGNUP_FAILURE, error };
+
+  function failure (error) {
+    return { type: registrationConstants.SIGNUP_FAILURE, error }
   }
+
   return dispatch => {
-    dispatch(request());
+    dispatch(request())
     setTimeout(() => {
       registrationServices
         .signup(
@@ -35,19 +39,19 @@ function signup(
         )
         .then(
           user => {
-            dispatch(success(user));
-            history.push("/myfamiliesshare");
+            dispatch(success(user))
+            history.push('/myfamiliesshare')
           },
           error => {
-            dispatch(failure(error));
+            dispatch(failure(error))
           }
-        );
-    }, 1000);
-  };
+        )
+    }, 1000)
+  }
 }
 
 const registrationActions = {
   signup
-};
+}
 
-export default registrationActions;
+export default registrationActions

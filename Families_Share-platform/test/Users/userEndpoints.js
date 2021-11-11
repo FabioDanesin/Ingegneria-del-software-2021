@@ -179,20 +179,21 @@ describe('/Post/api/users/authenticate/google', () => {
       })
   })
 })
-if (!process.env.CIRCLECI) {
-  describe('/Post/api/users/forgotpassword', () => {
-    it('it should send a forgot password email for an existing user', (done) => {
-      const data = { email: 'test@email.com' }
-      chai.request(server)
-        .post('/api/users/forgotpassword')
-        .send(data)
-        .end((err, res) => {
-          res.should.have.status(200)
-          done()
-        })
-    })
+// if (!process.env.CIRCLECI) {
+describe('/Post/api/users/forgotpassword', () => {
+  it('it should send a forgot password email for an existing user', (done) => {
+    const data = { email: 'test@email.com' }
+    chai.request(server)
+      .post('/api/users/forgotpassword')
+      .send(data)
+      .end((err, res) => {
+        res.should.have.status(200)
+        done()
+      })
   })
-}
+})
+// }
+
 describe('/Post/api/users/forgotpassword', () => {
   it('it should not send a forgot password email for non existing user', (done) => {
     const data = { email: 'fas@jela.com' }
