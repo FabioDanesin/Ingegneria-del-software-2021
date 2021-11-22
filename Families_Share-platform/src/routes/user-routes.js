@@ -78,6 +78,24 @@ const Device = require('../models/device')
 const Rating = require('../models/rating')
 const Community = require('../models/community')
 
+/**
+ * Registra un user : POST - /users
+ * Passing this json il the body of the request will create a new user.
+ * Passare un json simile al body della richiesta crea un nuovo user.
+ *
+ {
+    "given_name": "Testo",
+    "family_name": "Usero",
+    "number": "0123546879",
+    "email": "test@email.com",
+    "password": "password",
+    "visible": false,
+    "language": "en"
+  }
+
+ * Collezioni coinvolte: Device, User, Profile, Image, Address, Rating
+ *
+ */
 router.post('/', async (req, res, next) => {
   const {
     given_name, family_name, number, email, password, visible, language, deviceToken
