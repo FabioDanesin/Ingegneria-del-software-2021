@@ -15,6 +15,7 @@ const HTTPS_PORT = parseInt(process.env.HTTPS_PORT, 10)
 const HTTP_PORT = parseInt(process.env.HTTP_PORT, 10)
 
 const config = require('config')
+const { resourceLimits } = require('worker_threads')
 
 const dbHost = config.get('dbConfig.host')
 mongoose.set('useCreateIndex', true)
@@ -68,6 +69,7 @@ app.use('/api/profiles', require('./routes/profile-routes'))
 app.use('/api/children', require('./routes/child-routes'))
 app.use('/api/github', require('./routes/github-routes'))
 app.use('/api/community', require('./routes/community-routes'))
+app.use('/api/location', require("./routes/location-routes"))
 
 if (config.util.getEnv('NODE_ENV') === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')))
