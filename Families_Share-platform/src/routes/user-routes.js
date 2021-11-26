@@ -77,12 +77,15 @@ const Password_Reset = require('../models/password-reset')
 const Device = require('../models/device')
 const Rating = require('../models/rating')
 const Community = require('../models/community')
+const { use } = require('chai')
+const { request } = require('http')
+const { error } = require('console')
 
 router.post('/', async (req, res, next) => {
   const {
     given_name, family_name, number, email, password, visible, language, deviceToken
   } = req.body
-  if (!(given_name && family_name && email && password && visible !== undefined && language)) {
+  if (!(given_name && family_name && email && password && visible != undefined && language)) {
     return res.status(400).send('Bad Request')
   }
   try {

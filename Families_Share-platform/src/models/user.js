@@ -28,12 +28,24 @@ const userSchema = new mongoose.Schema({
   },
   auth0_token: String,
   last_login: Date,
-  language: {
-    type: String,
+  latitude: {
+    type:Number,
     required: true
+  },
+  longitude: {
+    type:Number
+  },
+  language: {
+    type: String
   },
   version: {
     type: String
+  },
+  latitude : {
+    type: Number
+  },
+  longitude : {
+    type : Number
   }
 }, { timestamps: true })
 

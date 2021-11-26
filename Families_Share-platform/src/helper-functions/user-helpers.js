@@ -16,7 +16,7 @@ var PdfMake = require('pdfmake')
 
 const calendar = google.calendar({
   version: 'v3',
-  auth: googleToken
+  auth: googleToken 
 })
 
 const getUsersGroupEvents = (calId, userId, usersChildrenIds) =>
@@ -37,11 +37,7 @@ const getUsersGroupEvents = (calId, userId, usersChildrenIds) =>
             usersChildrenIds.filter(
               childId => childrenIds.indexOf(childId) !== -1
             ).length > 0
-          if (userFlag || childFlag) {
-            return true
-          } else {
-            return false
-          }
+          return userFlag || childFlag
         }
       })
       resolve(usersEvents)
