@@ -245,7 +245,7 @@ class GroupActivities extends React.Component {
             )}
           </div>
           <div className="col-1-10 ">
-            <button
+             <button
               type="button"
               className="transparentButton center"
               onClick={this.handleModalOpen}

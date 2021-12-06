@@ -169,7 +169,11 @@ class MyFamiliesShareHeader extends React.Component {
       case "community":
         history.push("/community");
         break;
+      case "mypositivity":
+        history.push("/positivity");
+        break;
       default:
+        console.warn(`${key} DOES NOT EXIST`);
     }
   };
 
@@ -281,7 +285,7 @@ class MyFamiliesShareHeader extends React.Component {
               </div>
             </Menu.Item>
             <Menu.Item
-              style={menuItemWithLine}
+              style={menuItem}
               key="mycalendar"
               onClick={this.handleDrawerClick}
             >
@@ -291,6 +295,20 @@ class MyFamiliesShareHeader extends React.Component {
                 </div>
                 <div className="col-3-4">
                   <h1>{texts.myCalendar}</h1>
+                </div>
+              </div>
+            </Menu.Item>
+            <Menu.Item
+              style={menuItemWithLine}
+              key="mypositivity"
+              onClick={this.handleDrawerClick}
+            >
+              <div className="row no-gutters">
+                <div className="col-1-4">
+                  <i className="fas fa-calendar-alt"/> 
+                </div>
+                <div className="col-3-4">
+                  <h1>Segnala positvità</h1>
                 </div>
               </div>
             </Menu.Item>

@@ -10,7 +10,7 @@ function signup (
   visible,
   deviceToken,
   history
-) {,,,,
+) {
 
   function request () {
     return { type: registrationConstants.SIGNUP_REQUEST }

@@ -158,6 +158,12 @@ const SignUpScreen = Loadable({
   loading: () => Loading
 });
 
+const PositivityHandler = Loadable({
+  loader: () => import("./components/PositivityHandler"),
+  loading: () => Loading
+})  
+
+
 axios.interceptors.request.use(
   config => {
     let userToken = "";
@@ -237,6 +243,10 @@ class App extends React.Component {
               <Route
                 path="/changepsw/:token"
                 component={ChangePasswordScreen}
+              />
+              <PrivateRoute 
+                path="/positivity"
+                component={PositivityHandler}
               />
               <PrivateRoute path="/community" component={CommunityInterface} />
               <PrivateRoute
