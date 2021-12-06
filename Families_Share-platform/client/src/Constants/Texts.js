@@ -2604,7 +2604,8 @@ const nl = {
 
 const it = {
   groupMembers: {
-    export: "Esporta contatti"
+    export: "Esporta contatti",
+    infectionPositivityWarn:"Segnala contagio"
   },
   participantsModal: {
     header: "Partecipanti",
