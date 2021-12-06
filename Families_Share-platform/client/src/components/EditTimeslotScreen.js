@@ -21,6 +21,12 @@ import ConfirmDialog from "./ConfirmDialog";
 import LoadingSpinner from "./LoadingSpinner";
 import Images from "../Constants/Images";
 import Log from "./Log";
+import GoogleMap from "./GoogleMap";
+import PlacesAutocomplete , {
+  geocodeByAddress,
+  geocodeByPlaceId,
+  getLatLng,
+} from 'react-places-autocomplete';
 
 const getTimeslot = pathname => {
   return axios
@@ -54,8 +60,11 @@ class EditTimeslotScreen extends React.Component {
     notifyUsers: false,
     fetchedTimeslot: false,
     confirmDialogIsOpen: false,
-    confirmDialogTitle: ""
+    confirmDialogTitle: "",
+    address:"",
+    setAddress:()=>{}
   };
+
 
   async componentDidMount() {
     document.addEventListener("message", this.handleMessage, false);
@@ -347,8 +356,11 @@ class EditTimeslotScreen extends React.Component {
 
   handleChange = event => {
     const { notifyUsers } = this.state;
+    //console.log(notifyUsers);
     const { action } = this.props;
+    //console.log(action);
     const { name, value } = event.target;
+    //console.log(name,value);
     if (action === "edit") {
       if (name === "date" && !notifyUsers) {
         this.setState({ [name]: value, notifyUsers: true, madeChanges: true });
@@ -358,6 +370,11 @@ class EditTimeslotScreen extends React.Component {
     } else {
       this.setState({ [name]: value });
     }
+  };
+
+  handleSelect = async value => {
+
+
   };
 
   render() {
@@ -394,7 +411,9 @@ class EditTimeslotScreen extends React.Component {
           isOpen={confirmDialogIsOpen}
           handleClose={this.handleConfirmDialogClose}
         />
+
         <div id="activityHeaderContainer" className="row no-gutters">
+
           <div className="col-2-10">
             <button
               type="button"
@@ -433,6 +452,7 @@ class EditTimeslotScreen extends React.Component {
           </div>
         </div>
         <div id="activityMainContainer" style={{ borderBottom: "none" }}>
+          <h1>EditTimeslotScreen.js</h1> {/*TODO: da togliere */}
           <form
             ref={form => {
               this.formEl = form;
@@ -513,7 +533,11 @@ class EditTimeslotScreen extends React.Component {
                   placeholder={texts.name}
                   required
                 />
+
+
                 <span className="invalid-feedback" id="summaryErr" />
+
+
               </div>
             </div>
             <div className="row no-gutters" style={rowStyle}>
@@ -590,15 +614,53 @@ class EditTimeslotScreen extends React.Component {
                 <i className="fas fa-map-marker-alt activityInfoIcon" />
               </div>
               <div className="col-8-10">
-                <input
-                  type="text"
-                  name="location"
-                  value={location}
-                  className="expandedTimeslotInput form-control"
-                  onChange={this.handleChange}
-                  placeholder={texts.location}
-                  required
-                />
+                {/* <input */}
+                {/*   type="text" */}
+                {/*   name="location" */}
+                {/*   value={location} */}
+                {/*   className="expandedTimeslotInput form-control" */}
+                {/*   onChange={this.handleChange} */}
+                {/*   placeholder={texts.location} */}
+                {/*   required */}
+                {/* /> */}
+
+
+                <PlacesAutocomplete
+                  value={this.state.address}
+                  onChange={this.state.setAddress}
+                  onSelect={this.handleSelect}
+                >
+                  {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                    <div>
+                      <input
+                        //type="text"
+                        //name="summary"
+                        //value={summary}
+                        className="expandedTimeslotInput form-control"
+                        //placeholder={texts.name}
+                        required
+                        // onChange={this.handleChange}
+                        {...getInputProps({
+                          placeholder: texts.location,
+                          //className: 'location-search-input',
+                        })}
+                      />
+                      <div className="autocomplete-dropdown-container">
+                        {loading ? <div></div> : null}
+
+                        {suggestions.map( suggestion => {
+                          return (
+                            <div{...getSuggestionItemProps()}>
+                              {suggestion.description}
+                            </div>
+
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </PlacesAutocomplete>
+
                 <span className="invalid-feedback" id="locationErr" />
               </div>
             </div>

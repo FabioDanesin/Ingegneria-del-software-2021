@@ -133,6 +133,11 @@ class GroupMembers extends React.Component {
         label: texts.export,
         style: "optionsModalButton",
         handle: this.handleExport
+      },
+      {
+        label: texts.infectionPositivityWarn,
+        style: "optionsModalButton",
+        handle: this.handleExport
       }
     ];
     const membersPath = `/groups/${group.group_id}/members`;
