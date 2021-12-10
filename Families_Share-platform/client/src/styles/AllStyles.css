@@ -2084,6 +2084,12 @@
   margin-bottom: 1rem;
   border-radius: 0.5rem;
 }
+#covidContainer {
+  min-height: calc(100vh - 16.8rem);
+  overflow-y: auto;
+  position: relative;
+  top: 5.6rem;
+}
 #newReplyContainer i {
   font-size: 1.7rem;
   color: rgba(0, 0, 0, 0.7);

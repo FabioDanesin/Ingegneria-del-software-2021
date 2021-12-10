@@ -71,7 +71,8 @@ const GroupNavbar = ({ history, language, match, allowNavigation }) => {
     activeTab === "calendar",
     activeTab === "activities",
     activeTab === "members",
-    activeTab === "chat"
+    activeTab === "chat",
+    activeTab === "covid"
   ];
   return (
     <MuiThemeProvider theme={muiTheme}>
@@ -140,6 +141,18 @@ const GroupNavbar = ({ history, language, match, allowNavigation }) => {
               <i className="fas fa-envelope groupNavbarIcon" />
             ) : (
               <i className="far fa-envelope groupNavbarIcon" />
+            )
+          }
+        />
+        <BottomNavigationAction
+          value="covid"
+          disabled={disabled}
+          label="Covid"
+          icon={
+            flags[5] ? (
+              <i className="fas fa-chart-line groupNavbarIcon" />
+            ) : (
+              <i className="fas fa-chart-line groupNavbarIcon" />
             )
           }
         />
