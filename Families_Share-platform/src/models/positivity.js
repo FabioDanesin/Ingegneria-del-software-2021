@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 
 const positiveSchema = {
     user_id:{
-        type:Number,
+        type:String,
         required:true,
         unique:true
     },
