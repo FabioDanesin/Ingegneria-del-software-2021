@@ -5,25 +5,16 @@ import Axios from 'axios';
 
 const baseurl = "/api/positivity/" // URL base a cui tutte le richieste sono dirette.
 
-const addpositive = "newpositive";
-const addnegative = "newnegative";
 
 class PositivityHandler
     extends React.Component {
     
-    user_id = localStorage.getItem("user");
+    user_id = JSON.parse(localStorage.getItem("user"))["id"];
     event = "positive";  //Valore di default.
     date = null;
 
     constructor(props) {
         super(props);
-
-        // Necessario per ottenere la data
-        this.state={
-            datebox : "",
-            signaltype : ""
-        };
-
     }
     /**
      * Controlla se lo userid passato è presente nel database.
@@ -69,42 +60,52 @@ class PositivityHandler
     }
 
     handlePositivity(date) {
-        const targeturl = baseurl + "addnewpositive";
+        const posturl = baseurl + "addnewpositive";
         const patchurl = baseurl + "updatepositive";
-
-        //è identico per entrambi in ogni caso
-        const formdata = {
+        const geturl = baseurl + "getpositive";
+        const formdata = { //è identico per entrambi in ogni caso
             user_id: this.user_id,
             confirmation_date: date
         }
 
-        console.log("POSITIVITY");
-        try{
-            if(this.doesUserExist(this.user_id)){
-                Axios.patch(patchurl, formdata)
-            } else {
-                Axios.post(targeturl, formdata)
-                    //DEBUG ONLY
-                .then(
-                    (onfulfilled)=>{
-                        console.log("Success");
-                        console.log(onfulfilled);
-                    },
-                    (rejected)=>{
-                        console.log("Failure");
-                        console.error(rejected);
+        Axios
+            .post(
+                geturl, 
+                {user_id:this.user_id}
+            )
+            .then(
+                async (_success)=>{
+                    console.log("STATUS="+_success.status.toString());
+                    console.log("Found");
+                    try {
+                        return await Axios
+                            .patch(
+                                patchurl,
+                                formdata
+                            );
+                    } catch (onrejection) {
+                        console.error(`Check on url ${patchurl} failed due to ${onrejection}`);
                     }
-                ).catch(
-                    (rejected) => {
-                        console.log("Rejection");
-                        console.warn(rejected);
-                    }
-                );
-            }
-            
-        } catch (anyerror) {
-            console.error("Error in function handlePositivity : " + anyerror.toString());
-        }
+                },
+                (_failure)=>{
+                    console.log("Not found");
+                    Axios
+                        .post(
+                            posturl,
+                            formdata
+                        )
+                        .catch(
+                            (onrejection)=> {
+                                console.error(`Check on url ${posturl} failed due to ${onrejection}`);
+                            }
+                        )
+                }
+            )
+            .catch(
+                (rejection)=> {
+                    console.error(`Check on url ${geturl} failed due to ${rejection}`);
+                }
+            );
     } 
 
     handleNegativity() {
@@ -114,7 +115,8 @@ class PositivityHandler
             data:{
                 user_id : this.user_id
             }
-        }
+        };
+
         try{
             if(this.doesUserExist(this.user_id)){
                 Axios.delete(targeturl, payload);
@@ -159,7 +161,7 @@ class PositivityHandler
                 <button type="submit" onClick={
                     () => {
                         try {
-                            console.log("Starting")
+                            
                             const event = this.event;
                             const date = this.date;
                             switch(event) {

@@ -6,11 +6,68 @@ const Users = require("../models/user")
 const Positivity = require("../models/positivity")
 
 function userexists(user_id) {
-    return Users.findOne(user_id) != null;
+	return Users.findOne(user_id) != null;
 }
+/**
+ * URL = /getpositive
+ * PAYLOAD = 
+ * 	{
+ * 		user_id
+ * 	}
+ * URL "privato"
+ */
+router.post("/getpositive", 
+	(req, res, next) => {
+		try{
+			const {
+				user_id
+			} = req.body;
+			console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+			const response = Positivity.findOne(user_id);
+			console.log("RESPONSE="+String(response));
 
+			if(response) {
+				return res.json(
+					{
+						user_id : response.user_id,
+						confirmation_date : response.confirmation_date
+					}
+				);
+			} else {
+				return res.status(404).send("No positive user matching this UID")
+			}
+			
+		} catch (err) {
+			console.error("Error in URL /getpositive")
+			console.error(err);
+			next(err);
+		}
+	}
+)
+/**
+ * URL = "/addnewpositive"
+ * PAYLOAD = 
+ * 	{
+ * 		user_id,
+ * 		confirmation_date
+ * 	}
+ */
 router.post("/addnewpositive", 
 	async(req, res, next)=> {
+		const datasplitter = (datetime) => {
+			let y, m, d 
+			const split = String(datetime).split(["-"])
+			y = split[0]
+			m = split[1]
+			d = split[2]
+
+			return {
+				"year":y,
+				"month":m,
+				"day":d
+			}
+		}
+
 		try{ 
 			const {
 				user_id, 
@@ -19,8 +76,9 @@ router.post("/addnewpositive",
 			
 			const existence_condition = await userexists(user_id);
 			
-			if(existence_condition){
-				res.status(404).send("No user matching this UID");
+			if(!existence_condition){
+				console.error("No user matching UID=" + user_id);
+				return res.status(404).send("No user matching this UID");
 			} 
 		
 			const newdata = {
@@ -30,7 +88,7 @@ router.post("/addnewpositive",
 			
 			await Positivity.create(newdata)
 
-			res.status(200).send("Added positivity")
+			return res.status(200).send("Added positivity")
 		} catch (err) {
 			console.error("Error in URN /addnewpositive");
 			console.error(err)
@@ -39,50 +97,27 @@ router.post("/addnewpositive",
 	}
 )
 
-router.post("/getpositive", 
-    async(req, res, next) => {
-        try{
-            const {
-                user_id
-            } = req.body;
-            
-            const existence_condition = await userexists(user_id);
 
-            if(existence_condition){
-                res.status(404).send("No user matching this UID");
-            } else {
-                const response = await Positivity.findOne(user_id);
-                if(response) {
-                    res.json(
-                        {
-                            user_id : response.user_id,
-                            confirmation_date : response.confirmation_date
-                        }
-                    );
-                } else {
-                    res.status(404).send("No positive user matching this UID")
-                }
-            }
-        } catch (err) {
-			console.error("Error in URL /getpositive")
-            console.error(err);
-            next(err);
-        }
-    }
-)
-
+/**
+ * URL = /deletepositive
+ * PAYLOAD = 
+ * 	{
+ * 		user_id
+ * 	}
+ */
 router.delete("/deletepositive", 
     async (req, res, next) => { 
         try{
 			const {user_id} = req.body
-
+			console.log("Begin deletion");
 			const existence_condition = await userexists(user_id);
 			if(existence_condition) {
-				Positivity.deleteOne({user_id});
-				res.status(200).send("Positivity deleted")
+				await Positivity.deleteOne({user_id});
+				return res.status(200).send("Positivity deleted")
 			}else {
-				res.status(404).send("No data do delete matching the user id " + user_id + " was found")
+				return res.status(404).send("No data to delete matching the user id " + user_id + " was found")
 			}
+
         } catch (err) {
 			console.error("Error in URL /deletepositive")
             console.error(err);
@@ -91,6 +126,14 @@ router.delete("/deletepositive",
     }
 )
 
+/**
+ * URL= /updatepositive
+ * PAYLOAD = 
+ * 	{
+ * 		user_id,
+ * 		confirmation_date
+ * 	}
+ */
 router.patch("/updatepositive", 
     async (req, res, next) => { 
 		try{
@@ -107,9 +150,9 @@ router.patch("/updatepositive",
 				};
 
 				await Positivity.updateOne(setparameter, updateform);
-				res.status(200).send("Data updated successfully")
+				return res.status(200).send("Data updated successfully")
 			} else {
-				res.status(404).send("Error. No user found for the requested user id")
+				return res.status(404).send("Error. No user found for the requested user id")
 			}
 		} catch (err) {
 			console.error("Error in url /updatepositive")
