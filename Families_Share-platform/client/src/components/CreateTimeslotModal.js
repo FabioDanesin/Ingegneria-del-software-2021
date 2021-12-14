@@ -17,6 +17,7 @@ import {
 import withLanguage from "./LanguageContext";
 import Texts from "../Constants/Texts";
 import Images from "../Constants/Images";
+import GoogleMapPlaceSearch from "./GoogleMapPlaceSearch"
 
 Modal.setAppElement("#root");
 
@@ -291,15 +292,24 @@ class CreateTimeslotModal extends React.Component {
                   <i className="fas fa-map-marker-alt center" />
                 </div>
                 <div className="col-8-10">
-                  <input
-                    type="text"
-                    name="location"
-                    value={location}
-                    className="expandedTimeslotInput form-control"
-                    onChange={this.handleChange}
+                  {/* TODO: place autocomplete anche qua (alla creazione della prima attivita) */}
+                  {/* <input */}
+                  {/*   type="text" */}
+                  {/*   name="location" */}
+                  {/*   value={location} */}
+                  {/*   className="expandedTimeslotInput form-control" */}
+                  {/*   onChange={this.handleChange} */}
+                  {/*   placeholder={texts.location} */}
+                  {/*   required */}
+                  {/* /> */}
+
+                  <GoogleMapPlaceSearch
+                    callback={this.handleChange}
+                    inputClassName={"expandedTimeslotInput form-control"}
                     placeholder={texts.location}
-                    required
+                    location={location}
                   />
+
                 </div>
               </div>
               <div className="row no-gutters">

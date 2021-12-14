@@ -21,12 +21,8 @@ import ConfirmDialog from "./ConfirmDialog";
 import LoadingSpinner from "./LoadingSpinner";
 import Images from "../Constants/Images";
 import Log from "./Log";
-import GoogleMap from "./GoogleMap";
-import PlacesAutocomplete , {
-  geocodeByAddress,
-  geocodeByPlaceId,
-  getLatLng,
-} from 'react-places-autocomplete';
+import GoogleMapPlaceSearch from "./GoogleMapPlaceSearch"
+
 
 const getTimeslot = pathname => {
   return axios
@@ -364,7 +360,10 @@ class EditTimeslotScreen extends React.Component {
     if (action === "edit") {
       if (name === "date" && !notifyUsers) {
         this.setState({ [name]: value, notifyUsers: true, madeChanges: true });
-      } else {
+      } else if (name === "location"){
+        this.setState({ [name]: value, madeChanges: true, [event.target.latlng]:event.target.latlng, [event.target.place_id]:event.target.place_id  });
+      }
+      else {
         this.setState({ [name]: value, madeChanges: true });
       }
     } else {
@@ -372,10 +371,6 @@ class EditTimeslotScreen extends React.Component {
     }
   };
 
-  handleSelect = async value => {
-
-
-  };
 
   render() {
     const { language, history, action } = this.props;
@@ -624,42 +619,12 @@ class EditTimeslotScreen extends React.Component {
                 {/*   required */}
                 {/* /> */}
 
-
-                <PlacesAutocomplete
-                  value={this.state.address}
-                  onChange={this.state.setAddress}
-                  onSelect={this.handleSelect}
-                >
-                  {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                    <div>
-                      <input
-                        //type="text"
-                        //name="summary"
-                        //value={summary}
-                        className="expandedTimeslotInput form-control"
-                        //placeholder={texts.name}
-                        required
-                        // onChange={this.handleChange}
-                        {...getInputProps({
-                          placeholder: texts.location,
-                          //className: 'location-search-input',
-                        })}
-                      />
-                      <div className="autocomplete-dropdown-container">
-                        {loading ? <div></div> : null}
-
-                        {suggestions.map( suggestion => {
-                          return (
-                            <div{...getSuggestionItemProps()}>
-                              {suggestion.description}
-                            </div>
-
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </PlacesAutocomplete>
+                <GoogleMapPlaceSearch
+                  callback={this.handleChange}
+                  inputClassName={"expandedTimeslotInput form-control"}
+                  placeholder={texts.location}
+                  location={location}
+                />
 
                 <span className="invalid-feedback" id="locationErr" />
               </div>
