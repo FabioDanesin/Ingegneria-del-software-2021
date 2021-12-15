@@ -131,34 +131,47 @@ class PositivityHandler
     render() {
         return (
             <form id="InputFields">
-
-                <select 
-                    placeholder="Seleziona segnalazione"
-                    onChange={(e)=>{
-                        const v = e.target.value
-                        console.log("Event changed");
-                        this.event = v;
-                        console.log(this.event);;
-                    }}
-                    >
-                    <option value="positive">Segnala positività</option>
-                    <option value="negative">Segnala negatività</option> 
-                </select>
-
-                <input 
-                    id="confirmation_date" 
-                    type="Date"
-                    onChange={
-                        (e) =>{
-                            console.log("Date changed");
-                            this.date = e.target.value;
-                            console.log(this.date);
+                <div class="row no-gutters">
+                    <div class = "col-2-10">  
+                    </div>
+                    <div class = "col-6-10">  
+                    
+                        
+                        
+                    
+                    <select class="editProfileInputField" 
+                        placeholder="Seleziona segnalazione"
+                        onChange={(e)=>{
+                            const v = e.target.value
+                            console.log("Event changed");
+                            this.event = v;
+                            console.log(this.event);;
+                        }}
+                        >
+                        <option value="positive">Segnala positività</option>
+                        <option value="negative">Segnala negatività</option> 
+                    </select>
+                    
+                    
+                    
+                    <input class="editProfileInputField"
+                        id="confirmation_date" 
+                        type="Date"
+                        onChange={
+                            (e) =>{
+                                console.log("Date changed");
+                                this.date = e.target.value;
+                                console.log(this.date);
+                            }
                         }
-                    }
-                    >
-                </input>
+                        >
+                    </input>
+                    </div> 
+                </div>
+                <div class="myPromptActionsContainer">
 
-                <button type="submit" onClick={
+                <button class="myPromptAction" type="submit" onClick={
+
                     () => {
                         try {
                             
@@ -181,6 +194,7 @@ class PositivityHandler
                         } 
                     }
                 }>Segnala!</button>  
+                </div>
             </form>
         );
     }
