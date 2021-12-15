@@ -14,6 +14,11 @@ import LoadingSpinner from "./LoadingSpinner";
 import TimeslotSubcribe from "./TimeslotSubcribe";
 import Images from "../Constants/Images";
 import Log from "./Log";
+import GoogleMapSan from "./GoogleMapSan";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
 
 const styles = () => ({
   avatar: {
@@ -160,7 +165,8 @@ class TimeslotScreen extends React.Component {
         }
       }
     },
-    adminChanges: {}
+    adminChanges: {},
+
   };
 
   async componentDidMount() {
@@ -198,6 +204,17 @@ class TimeslotScreen extends React.Component {
     const childrenProfiles = await getChildrenProfiles([
       ...new Set(childrenIds)
     ]);
+
+    try {
+      let address = timeslot.location;
+      const results = await getGeocode({address});
+      const { lat, lng } = await getLatLng(results[0]);
+      this.setState({ lat, lng });
+      console.log( lat, lng );
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+
     this.setState({
       fetchedTimeslot: true,
       timeslot,
@@ -917,6 +934,8 @@ class TimeslotScreen extends React.Component {
           <div className="row no-gutters" style={rowStyle}>
             {this.renderParticipants("admins")}
           </div>
+
+
         </div>
         {timeslot.extendedProperties.shared.status !== "completed" &&
           new Date(timeslot.start.dateTime).getTime() - now < oneDay && (
@@ -932,6 +951,16 @@ class TimeslotScreen extends React.Component {
               </div>
             </div>
           )}
+
+        <div id="activityMainContainer" style={{ margin: 0 }}>
+
+
+          <GoogleMapSan
+            lat={this.state.lat}
+            lng={this.state.lng}
+          />
+
+        </div>
       </React.Fragment>
     ) : (
       <LoadingSpinner />

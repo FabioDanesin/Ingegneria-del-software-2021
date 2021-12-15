@@ -28,10 +28,7 @@ const libraries = ["places"];
 
 function GoogleMapPlaceSearch({ callback,inputClassName,placeholder,location }){
 
-  // const {isLoaded,loadError} = useLoadScript({
-  //   googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-  //   libraries,
-  // });
+
 
   function getCurrentPosition(){
     let {lat,lng} = 0;
@@ -89,20 +86,12 @@ function GoogleMapPlaceSearch({ callback,inputClassName,placeholder,location }){
 
 
   const renderSuggestions = () =>
-    // data.map((suggestion) => {
-    //   const {
-    //     place_id,
-    //     structured_formatting: { main_text, secondary_text },
-    //   } = suggestion;
 
       data.map(({ place_id, description }) => {
         console.log({ place_id, description })
-        // return(<ComboboxOption key={place_id} value={description} />)
-      // })
 
       return (
         <li key={place_id} onClick={()=>handleSelect(description)}>
-          {/* <strong>{main_text}</strong> <small>{secondary_text}</small> */}
           <strong>{description}</strong>
         </li>
       );
@@ -114,29 +103,6 @@ function GoogleMapPlaceSearch({ callback,inputClassName,placeholder,location }){
     clearSuggestions();
   });
   return (
-    // <div className="">
-    //   <Combobox onSelect={handleSelect}>
-    //     <ComboboxInput
-    //       value={value}
-    //       onChange={handleInput}
-    //       disabled={!ready}
-    //       placeholder={placeholder}
-    //       className = {inputClassName}
-    //       selectOnClick
-    //       required
-    //     />
-    //     <ComboboxPopover>
-    //       <ComboboxList>
-    //         {status === "OK" &&
-    //           data.map(({ id, description }) => {
-    //             console.log({ id, description })
-    //             return(<ComboboxOption key={id} value={description} />)
-    //           })
-    //         }
-    //       </ComboboxList>
-    //     </ComboboxPopover>
-    //   </Combobox>
-    // </div>
     <div ref={ref}>
       <input
         value={value}

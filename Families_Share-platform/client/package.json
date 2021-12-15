@@ -16,6 +16,7 @@
     "body-scroll-lock": "^2.7.1",
     "bootstrap": "^4.5.0",
     "braces": "^3.0.2",
+    "date-fns": "^2.27.0",
     "debug": "^4.2.0",
     "google-maps-react": "^2.0.6",
     "history": "^4.10.1",
