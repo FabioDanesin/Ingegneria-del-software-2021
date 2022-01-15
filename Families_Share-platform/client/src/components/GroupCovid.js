@@ -85,6 +85,7 @@ function BigNumber(props) {
       width: "100%"
     }}>
       <Card style={ {
+        background: "linear-gradient(#00838f, #ffffff)",
         paddingLeft: 16,
         paddingRight: 16,
         paddingTop: 4,
@@ -99,7 +100,7 @@ function BigNumber(props) {
         </p>
 
         <p style={ {
-          textAlign: "center"
+          textAlign: "center",
         }}>
           {props.label}
         </p>
