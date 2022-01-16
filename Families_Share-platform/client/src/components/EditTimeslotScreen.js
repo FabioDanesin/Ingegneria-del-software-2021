@@ -447,7 +447,6 @@ class EditTimeslotScreen extends React.Component {
           </div>
         </div>
         <div id="activityMainContainer" style={{ borderBottom: "none" }}>
-          <h1>EditTimeslotScreen.js</h1> {/*TODO: da togliere */}
           <form
             ref={form => {
               this.formEl = form;

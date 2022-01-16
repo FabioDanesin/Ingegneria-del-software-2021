@@ -958,8 +958,8 @@ class TimeslotScreen extends React.Component {
           <GoogleMapSan
             lat={this.state.lat}
             lng={this.state.lng}
-          />
-
+            location={this.state.timeslot.location}
+            />
         </div>
       </React.Fragment>
     ) : (

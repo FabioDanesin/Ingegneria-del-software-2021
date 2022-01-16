@@ -22,7 +22,7 @@ const options = {
   disableDefaultUI:true
 };
 
-function GoogleMapSan({ lat, lng }){
+function GoogleMapSan({ lat, lng, location}){
   //mettere qua i dati per posizionare il marker dove si vuole fare l'evento
   const [marker,setMarkers] = React.useState({ lat, lng });
   const [selected,setSelected] = React.useState(null);
@@ -55,10 +55,18 @@ function GoogleMapSan({ lat, lng }){
         <InfoWindow
           position={{lat: selected.lat, lng: selected.lng}}
           onCloseClick={() => setSelected(null)}>
-          <div>
-            <h2>Spotted</h2>
 
+          {/*
+           href="javascript:;" è per evitare che la pagina venga aggiornata
+           Al cliccare del marker, si potrà visualizzare l'indirizzo scelto per l'attività e un link:
+           se cliccato, verrà aperta una nuova pagina con l'indirizzo su google maps.
+          */}
+          <div>
+            <h2>{location}</h2>
+            <a href="javascript:;" onClick={() => window.open("https://maps.google.com?q="+ selected.lat + "," + selected.lng )}>
+              Visualizza su Google Maps</a>
           </div>
+
         </InfoWindow>
       ) : null}
 
