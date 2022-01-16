@@ -18,6 +18,12 @@ const GroupCovid = props => {
 
   const [covidData, setCovidData] = useState();
 
+
+  /*
+  Funziona principale che recupera i dati interessati per l'applicazione dall'API.
+  I dati vengono aggiornati ogni 24 ore.
+   */
+
   useEffect(() => {
     axios
       .get(`https://api.github.com/repos/pcm-dpc/COVID-19/contents/dati-json/dpc-covid19-ita-andamento-nazionale-latest.json`)
@@ -78,6 +84,11 @@ GroupCovid.propTypes = {
 };
 
 
+/*
+Funzione utilizzata per mostrare i dati riguardanti le statistiche Covid in Italia.
+Props è costituito da 2 parametri: un numero (number) e una stringa per la descrizione del dato (label).
+*/
+
 function BigNumber(props) {
   return (
     <Grid item xs={12} md={6} lg={4} style={ {
@@ -114,6 +125,12 @@ BigNumber.propTypes = {
   label: PropTypes.string
 };
 
+
+
+/*
+Questa funzione calcola da quante ore sono usciti i nuovi dati riguardo le statistiche Covid in Italia.
+Viene sottratta dalla data corrente la data fornita dall'API.
+ */
 
 function calcDate(covidData) {
   const lastUpdate = new Date(covidData.data)
