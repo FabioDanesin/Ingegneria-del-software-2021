@@ -86,7 +86,7 @@ class CreateActivityInformation extends React.Component {
             />
           </div>
         </div>
-        <div className="row no-gutters" style={rowStyle}>
+        <div className="row no-gutters" style={{...rowStyle, ...{visibility: "hidden", position: "absolute"}}}>
           <div className="col-2-10">
             <i className="fas fa-map-marker-alt center" />
           </div>
