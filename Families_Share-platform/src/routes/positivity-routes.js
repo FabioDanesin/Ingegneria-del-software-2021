@@ -10,19 +10,18 @@ function userexists(user_id) {
 }
 /**
  * URL = /getpositive
- * PAYLOAD = 
+ * PAYLOAD =
  * 	{
  * 		user_id
  * 	}
  * URL "privato"
  */
-router.post("/getpositive", 
+router.post("/getpositive",
 	(req, res, next) => {
 		try{
 			const {
 				user_id
 			} = req.body;
-			console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
 			const response = Positivity.findOne(user_id);
 			console.log("RESPONSE="+String(response));
 
@@ -36,7 +35,7 @@ router.post("/getpositive",
 			} else {
 				return res.status(404).send("No positive user matching this UID")
 			}
-			
+
 		} catch (err) {
 			console.error("Error in URL /getpositive")
 			console.error(err);
@@ -46,16 +45,16 @@ router.post("/getpositive",
 )
 /**
  * URL = "/addnewpositive"
- * PAYLOAD = 
+ * PAYLOAD =
  * 	{
  * 		user_id,
  * 		confirmation_date
  * 	}
  */
-router.post("/addnewpositive", 
+router.post("/addnewpositive",
 	async(req, res, next)=> {
 		const datasplitter = (datetime) => {
-			let y, m, d 
+			let y, m, d
 			const split = String(datetime).split(["-"])
 			y = split[0]
 			m = split[1]
@@ -68,24 +67,24 @@ router.post("/addnewpositive",
 			}
 		}
 
-		try{ 
+		try{
 			const {
-				user_id, 
+				user_id,
 				confirmation_date
 			} = req.body;
-			
+
 			const existence_condition = await userexists(user_id);
-			
+
 			if(!existence_condition){
 				console.error("No user matching UID=" + user_id);
 				return res.status(404).send("No user matching this UID");
-			} 
-		
+			}
+
 			const newdata = {
-				user_id:user_id, 
+				user_id:user_id,
 				confirmation_date:confirmation_date
 			}
-			
+
 			await Positivity.create(newdata)
 
 			return res.status(200).send("Added positivity")
@@ -100,13 +99,13 @@ router.post("/addnewpositive",
 
 /**
  * URL = /deletepositive
- * PAYLOAD = 
+ * PAYLOAD =
  * 	{
  * 		user_id
  * 	}
  */
-router.delete("/deletepositive", 
-    async (req, res, next) => { 
+router.delete("/deletepositive",
+    async (req, res, next) => {
         try{
 			const {user_id} = req.body
 			console.log("Begin deletion");
@@ -128,17 +127,17 @@ router.delete("/deletepositive",
 
 /**
  * URL= /updatepositive
- * PAYLOAD = 
+ * PAYLOAD =
  * 	{
  * 		user_id,
  * 		confirmation_date
  * 	}
  */
-router.patch("/updatepositive", 
-    async (req, res, next) => { 
+router.patch("/updatepositive",
+    async (req, res, next) => {
 		try{
 			const {user_id, confirmation_date} = req.body
-			
+
 			const existence_condition = userexists(user_id);
 			if(existence_condition){
 				const setparameter = {
