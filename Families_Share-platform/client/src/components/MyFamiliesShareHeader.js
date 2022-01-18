@@ -305,7 +305,7 @@ class MyFamiliesShareHeader extends React.Component {
             >
               <div className="row no-gutters">
                 <div className="col-1-4">
-                  <i className="fas fa-calendar-alt"/>
+                  <i className="fas fa-bullhorn"></i>
                 </div>
                 <div className="col-3-4">
                   <h1>Segnala positività</h1>
