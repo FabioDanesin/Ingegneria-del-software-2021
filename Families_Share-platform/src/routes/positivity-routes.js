@@ -4,6 +4,7 @@ const router = new express.Router()
 
 const Users = require("../models/user")
 const Positivity = require("../models/positivity")
+const mongoose = require('mongoose');
 
 function userexists(user_id) {
 	return Users.findOne(user_id) != null;
@@ -53,36 +54,26 @@ router.post("/getpositive",
  */
 router.post("/addnewpositive",
 	async(req, res, next)=> {
-		const datasplitter = (datetime) => {
-			let y, m, d
-			const split = String(datetime).split(["-"])
-			y = split[0]
-			m = split[1]
-			d = split[2]
-
-			return {
-				"year":y,
-				"month":m,
-				"day":d
-			}
-		}
 
 		try{
 			const {
 				user_id,
-				confirmation_date
+				confirmation_date,
+				result
 			} = req.body;
 
-			const existence_condition = await userexists(user_id);
+			//const existence_condition = userexists(user_id);
 
-			if(!existence_condition){
-				console.error("No user matching UID=" + user_id);
-				return res.status(404).send("No user matching this UID");
-			}
+			// if(!existence_condition){
+			// 	console.error("No user matching UID=" + user_id);
+			// 	return res.status(404).send("No user matching this UID");
+			// }
 
 			const newdata = {
-				user_id:user_id,
-				confirmation_date:confirmation_date
+				positivity_id:new mongoose.Types.ObjectId(),
+				user:user_id,
+				confirmation_date:confirmation_date,
+				result:result
 			}
 
 			await Positivity.create(newdata)

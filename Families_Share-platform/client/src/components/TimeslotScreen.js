@@ -15,7 +15,7 @@ import TimeslotSubcribe from "./TimeslotSubcribe";
 import Images from "../Constants/Images";
 import Log from "./Log";
 import GoogleMapSan from "./GoogleMapSan";
-import usePlacesAutocomplete, {
+import  {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";

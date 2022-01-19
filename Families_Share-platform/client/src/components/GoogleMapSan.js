@@ -1,15 +1,12 @@
 import React from "react";
 import {
   GoogleMap,
-  useLoadScript,
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
 
-import { formatRelative } from "date-fns";
 
 import mapStyles from "../styles/mapStyles";
-import GoogleMapPlaceSearch from "./GoogleMapPlaceSearch";
 
 const mapContainerStyle = {
   width:"90vw",
@@ -23,8 +20,7 @@ const options = {
 };
 
 function GoogleMapSan({ lat, lng, location}){
-  //mettere qua i dati per posizionare il marker dove si vuole fare l'evento
-  const [marker,setMarkers] = React.useState({ lat, lng });
+  const [marker] = React.useState({ lat, lng });
   const [selected,setSelected] = React.useState(null);
 
   const mapRef = React.useRef();

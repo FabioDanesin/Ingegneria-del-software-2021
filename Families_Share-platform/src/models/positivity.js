@@ -1,13 +1,19 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
 
 const positiveSchema = {
-    user_id:{
+    positivity_id: {
+        type: mongoose.ObjectId,
+        required: true,
+    },
+    user:{
         type:String,
         required:true,
-        unique:true
     },
     confirmation_date:{
+        type:String,
+        required:true
+    },
+    result:{
         type:String,
         required:true
     }

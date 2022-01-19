@@ -70,13 +70,6 @@ class PositivityHandler
     }
 
 
-
-
-
-
-
-
-
     /**
      * Controlla se lo userid passato è presente nel database.
      *
@@ -126,49 +119,15 @@ class PositivityHandler
         const geturl = baseurl + "getpositive";
         const formdata = { //è identico per entrambi in ogni caso
             user_id: this.state.userId,
-            confirmation_date: this.state.positivityDate
+            confirmation_date: date,
+            result:this.state.positivityValue.toUpperCase()
         }
-
-
-
         axios
-            .post(
-                geturl,
-                {user_id:this.state.userId}
-            )
-            .then(
-                async (_success)=>{
-                    console.log("STATUS="+_success.status.toString());
-                    console.log("Found");
-                    try {
-                        return await axios
-                            .patch(
-                                patchurl,
-                                formdata
-                            );
-                    } catch (onrejection) {
-                        console.error(`Check on url ${patchurl} failed due to ${onrejection}`);
-                    }
-                },
-                (_failure)=>{
-                    console.log("Not found");
-                    axios
-                        .post(
-                            posturl,
-                            formdata
-                        )
-                        .catch(
-                            (onrejection)=> {
-                                console.error(`Check on url ${posturl} failed due to ${onrejection}`);
-                            }
-                        )
-                }
-            )
-            .catch(
-                (rejection)=> {
-                    console.error(`Check on url ${geturl} failed due to ${rejection}`);
-                }
-            );
+          .post(posturl, formdata)
+          .catch((onrejection)=> {
+              console.error(`Check on url ${posturl} failed due to ${onrejection}`);
+            }
+          )
     }
 
     handleNegativity() {
@@ -192,7 +151,6 @@ class PositivityHandler
 
 
      async sendPositivityAnnouncements(userId,positivityValue,positivityDate,myGroups) {
-
         const bodyFormData = new FormData();
         bodyFormData.append("message",
           `Sono risultato: ${positivityValue.toUpperCase()} al test covid il giorno ${positivityDate}`);
@@ -203,16 +161,25 @@ class PositivityHandler
             .post(`/api/groups/${group.group_id}/announcements`, bodyFormData)
             .then(response => {
               Log.info(response);
-              //handleRefresh();
             })
             .catch(error => {
               Log.error(error);
             });
 
-          console.log(myGroups);
         });
-        // console.log(myGroups);
+       this.handlePositivity(positivityDate);
     }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    try {
+      const { myGroups,positivityDate,positivityValue,userId } = this.state;
+      this.sendPositivityAnnouncements(userId, positivityValue, positivityDate, myGroups)
+        .then(r  => alert("La tua segnalazione è stata inviata nelle chat di tutti i tuoi gruppi."));
+    }catch (error) {
+      console.error(error);
+    }
+  }
 
     render() {
       const { fetchedUserInfo} = this.state;
@@ -260,18 +227,6 @@ class PositivityHandler
           </div>
         );
     }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    try {
-      const { myGroups,positivityDate,positivityValue,userId } = this.state;
-      this.sendPositivityAnnouncements(userId, positivityValue, positivityDate, myGroups)
-        .then(r  => alert("La tua segnalazione è stata inviata nelle chat di tutti i tuoi gruppi."));
-    }catch (error) {
-      console.error(error);
-    }
-  }
-
 
 }
 
