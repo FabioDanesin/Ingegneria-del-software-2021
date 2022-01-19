@@ -45,9 +45,11 @@ class PositivityHandler
             userId : JSON.parse(localStorage.getItem("user"))["id"],
             fetchedUserInfo: false,
             myGroups: [],
-            date : null,
-            event : "positive"  //Valore di default
+            positivityDate : null,
+            positivityValue : "positivo"  //Valore di default
         };
+
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
 
@@ -124,7 +126,7 @@ class PositivityHandler
         const geturl = baseurl + "getpositive";
         const formdata = { //è identico per entrambi in ogni caso
             user_id: this.state.userId,
-            confirmation_date: this.state.date
+            confirmation_date: this.state.positivityDate
         }
 
 
@@ -189,30 +191,31 @@ class PositivityHandler
     }
 
 
-    async sendPositivityAnnouncements(userId,date,myGroups) {
+     async sendPositivityAnnouncements(userId,positivityValue,positivityDate,myGroups) {
 
         const bodyFormData = new FormData();
-        bodyFormData.append("message", "COVID SIGNAL");
+        bodyFormData.append("message",
+          `Sono risultato: ${positivityValue.toUpperCase()} al test covid il giorno ${positivityDate}`);
         bodyFormData.append("user_id", userId);
 
-      myGroups.forEach(group => {
-        axios
-          .post(`/api/groups/${group.group_id}/announcements`, bodyFormData)
-          .then(response => {
-            Log.info(response);
-            //handleRefresh();
-          })
-          .catch(error => {
-            Log.error(error);
-          });
+        myGroups.forEach(group => {
+          axios
+            .post(`/api/groups/${group.group_id}/announcements`, bodyFormData)
+            .then(response => {
+              Log.info(response);
+              //handleRefresh();
+            })
+            .catch(error => {
+              Log.error(error);
+            });
 
-        console.log(myGroups);
-      });
+          console.log(myGroups);
+        });
         // console.log(myGroups);
     }
 
     render() {
-        const { fetchedUserInfo,myGroups } = this.state;
+      const { fetchedUserInfo} = this.state;
       const { history } = this.props;
         return (
           <div>
@@ -220,67 +223,54 @@ class PositivityHandler
               title={"Segnala positività"}
               onClick={() => history.replace("/myfamiliesshare")}
             />
-            <form id="InputFields">
+            {fetchedUserInfo &&<form id="InputFields" onSubmit={this.handleSubmit}>
                 <div className="row no-gutters">
                     <div className = "col-2-10">
                     </div>
                     <div className = "col-6-10">
 
-                    <select className="editProfileInputField"
+                      <select
+                        className="editProfileInputField"
                         placeholder="Seleziona segnalazione"
+                        value={this.state.positivityValue}
                         onChange={(e)=>{
-                            this.setState({event:e.target.value});
-                        }}
-                        >
-                        <option value="positive">Segnala positività</option>
-                        <option value="negative">Segnala negatività</option>
-                    </select>
+                            this.setState({positivityValue:e.target.value});
+                        }}>
+                        <option value="positivo">Segnala positività</option>
+                        <option value="negativo">Segnala negatività</option>
+                      </select>
 
-                    <input className="editProfileInputField"
+                      <input
+                        className="editProfileInputField"
                         id="confirmation_date"
                         type="Date"
+                        value={this.state.positivityDate}
                         onChange={
                             (e) =>{
-                                this.setState({date:e.target.value});
+                                this.setState({positivityDate:e.target.value});
                             }
-                        }
-                        >
-                    </input>
+                        }/>
+
                     </div>
                 </div>
                 <div className="myPromptActionsContainer">
-
-                    {fetchedUserInfo && (<button className="myPromptAction"  onClick={
-                    () => {
-                        try {
-                            const userId = this.state.userId;
-                            const event = this.state.event;
-                            const date = this.state.date;
-                            switch(event) {
-                                case "positive":
-                                    //this.handlePositivity(date);
-                                    this.sendPositivityAnnouncements(userId,date,myGroups)
-                                      .then(r => console.log(r));
-                                    break;
-                                case "negative":
-
-                                    //this.handleNegativity();
-                                    break;
-
-                                default:
-                                    throw new Error(`Case ${event} not defined`);
-                            }
-
-                        }catch (error) {
-                            console.error(error);
-                        }
-                    }
-                }>Segnala!</button>)}
+                    <button className="myPromptAction" >Segnala!</button>
                 </div>
-            </form>
+            </form>}
           </div>
         );
     }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    try {
+      const { myGroups,positivityDate,positivityValue,userId } = this.state;
+      this.sendPositivityAnnouncements(userId, positivityValue, positivityDate, myGroups)
+        .then(r  => alert("La tua segnalazione è stata inviata nelle chat di tutti i tuoi gruppi."));
+    }catch (error) {
+      console.error(error);
+    }
+  }
 
 
 }
